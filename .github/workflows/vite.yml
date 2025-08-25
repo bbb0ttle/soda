@@ -67,6 +67,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --no-frozen-lockfile
         shell: bash
+      - name: Build artifact
+        run: pnpm build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
