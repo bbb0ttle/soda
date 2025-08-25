@@ -57,6 +57,10 @@ jobs:
         with:
           node-version: 18.12.x
           cache: "pnpm"
+      - name: Set Github Packages Registry
+        run: npm config set @bbb0ttle:registry=https://npm.pkg.github.com
+      - name: Auth Github Packages
+        run: npm config set //npm.pkg.github.com/:_authToken ${{ secrets.PKG_TOKEN }}
       - name: Install pnpm
         shell: bash
         run: npm install -g pnpm
