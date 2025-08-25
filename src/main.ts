@@ -1,7 +1,7 @@
 import '@bbb0ttle/bbbubble';
-
-// import type { BBBubble } from "@bbb0ttle/bbbubble";
-
-window.addEventListener("bubble-grown", (_evt) => {
-    // const element = evt.target as BBBubble;
-})
+// import {type BBBubble, BubbleEvent} from "@bbb0ttle/bbbubble";
+//
+// window.addEventListener(BubbleEvent.GROWN, (evt) => {
+//     const element = evt.target as BBBubble;
+//     console.log("element grown:", element);
+// })
