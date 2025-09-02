@@ -1,7 +1,7 @@
-import '@bbb0ttle/bbbubble';
-// import {type BBBubble, BubbleEvent} from "@bbb0ttle/bbbubble";
-//
-// window.addEventListener(BubbleEvent.GROWN, (evt) => {
-//     const element = evt.target as BBBubble;
-//     console.log("element grown:", element);
-// })
+import type { BBBubble } from "@bbb0ttle/bbbubble";
+import { BreathBubble } from "./SodaBubble/BreathBubble";
+
+addEventListener('bubble-connected', (event) => {
+    const bubble = event.target as BBBubble;
+    bubble.behaviorRegistry.register('breath', BreathBubble)
+});
