@@ -1,9 +1,18 @@
-import type { BBBubble, BubbleBehavior } from "@bbb0ttle/bbbubble";
+import type { BBBubble, BubbleBehavior, Position} from "@bbb0ttle/bbbubble";
 
 export class BreathBubble implements BubbleBehavior {
     public constructor(bubble: BBBubble) {
         this.actor = bubble;
     }
+
+    onForgot: () => Promise<void> = async () => {
+
+    };
+
+    onLongPress?: ((pos: Position, originEvent: Event) => Promise<void>) | undefined;
+    onShortPress?: ((pos: Position, originEvent: Event) => Promise<void>) | undefined;
+    onDrag?: ((pos: Position, originEvent: Event) => Promise<void>) | undefined;
+    onPointEvtCancel?: (() => void) | undefined;
 
     actor: BBBubble;
 
