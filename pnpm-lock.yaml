@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@bbb0ttle/bbbubble':
-        specifier: 0.2.3-a.50
-        version: 0.2.3-a.50
+        specifier: 0.2.3-a.53
+        version: 0.2.3-a.53
     devDependencies:
       typescript:
         specifier: ~5.8.3
@@ -21,8 +21,8 @@ importers:
 
 packages:
 
-  '@bbb0ttle/bbbubble@0.2.3-a.50':
-    resolution: {integrity: sha512-aTT2HQtJhuZmo+OFICuN0XeLFeKAWhKG3998fT3F9aMwbj0IhvENX6hQnV2Wi0bSjiHSCdVg5I2ucmdIDzdSBw==, tarball: https://npm.pkg.github.com/download/@bbb0ttle/bbbubble/0.2.3-a.50/34f7c490ac5cbd661c301d37c88ee470c8dc19c3}
+  '@bbb0ttle/bbbubble@0.2.3-a.53':
+    resolution: {integrity: sha512-lr57VFinsPiqET2NkeOVzGDZ8YrpXcB+1xiaKtgWCn+1tADE4ukVNna0r0A3sNHUg84fdS27iAc4Fmc5CiLOpA==, tarball: https://npm.pkg.github.com/download/@bbb0ttle/bbbubble/0.2.3-a.53/b6d0630fbebfecd86bcd628572be096fc944d808}
 
   '@esbuild/aix-ppc64@0.25.9':
     resolution: {integrity: sha512-OaGtL73Jck6pBKjNIe24BnFE6agGl+6KxDtTfHhy1HmhthfKouEcOhqpSL64K4/0WCtbKFLOdzD/44cJ4k9opA==}
@@ -378,7 +378,7 @@ packages:
 
 snapshots:
 
-  '@bbb0ttle/bbbubble@0.2.3-a.50': {}
+  '@bbb0ttle/bbbubble@0.2.3-a.53': {}
 
   '@esbuild/aix-ppc64@0.25.9':
     optional: true
