@@ -1,10 +1,8 @@
 import {type BBBubble, Glass} from "@bbb0ttle/bbbubble";
-import { BreathBubble } from "./SodaBubble/BreathBubble";
 import {GlassClickBubble} from "./SodaBubble/glassClickBubble.ts";
 
 addEventListener('bubble-connected', (event) => {
     const bubble = event.target as BBBubble;
-    bubble.behaviorRegistry.register('breath', BreathBubble)
     bubble.behaviorRegistry.register('glassClick', GlassClickBubble)
 });
 
@@ -33,14 +31,14 @@ addEventListener('DOMContentLoaded', (_event) => {
         }
 
         const pos =  getEventCoords(event);
-        const bubble = await glass.getRandomDiedBubble() as BBBubble;
+        const bubble = await glass.getRandomDiedBubble();
         if (!bubble) {
             return;
         }
 
         bubble.display(false)
 
-        await bubble.moveTo(pos, 1);
+        await bubble.goto(pos, 1);
         await bubble.scaleTo(20, 1);
 
         const clickBehavior = bubble.behaviorRegistry.get('glassClick');

@@ -8,6 +8,12 @@ export class GlassClickBubble implements BubbleBehavior {
     onForgot: () => Promise<void> = async () => {
     };
 
+    onLearned: () => Promise<void> = async () => {
+        return this.onBorn()
+    };
+    onSick: () => Promise<void> = async () => {};
+    after?: ((stage: Stage) => Promise<void>) | undefined;
+
     onLongPress?: ((pos: { x: number; y: number; }, originEvent: Event) => Promise<void>) | undefined;
     onShortPress?: ((pos: { x: number; y: number; }, originEvent: Event) => Promise<void>) | undefined;
     onDrag?: ((pos: { x: number; y: number; }, originEvent: Event) => Promise<void>) | undefined;
@@ -21,14 +27,18 @@ export class GlassClickBubble implements BubbleBehavior {
         this.actor.position.x -= size / 2;
         this.actor.position.y -= size / 2;
 
-        this.actor.moveTo(this.actor.position);
+        this.actor.goto(this.actor.position);
         this.actor.display(true);
         this.actor.fade(this.actor.randomInitOpacity());
 
         await this.actor.bounce(size)
 
+        await this.actor.goto(this.actor.topPos(), this.actor.moveDuration());
+
+        await this.actor.fade(0);
+
         const normalBehavior = this.actor.behaviorRegistry.get('default');
-        await this.actor.learn(normalBehavior, Stage.DIED);
+        await this.actor.learn(normalBehavior);
     };
 
     onGlassReady: () => Promise<void> = async () => {
