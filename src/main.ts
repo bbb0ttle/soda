@@ -1,5 +1,5 @@
 import {type BBBubble, Glass} from "@bbb0ttle/bbbubble";
-import {GlassClickBubble} from "./SodaBubble/glassClickBubble.ts";
+import {GlassClickBubble} from "./SodaBubble/GlassClickBubble.ts";
 
 addEventListener('bubble-connected', (event) => {
     const bubble = event.target as BBBubble;
