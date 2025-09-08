@@ -1,9 +1,11 @@
 import {type BBBubble, Glass} from "@bbb0ttle/bbbubble";
 import {GlassClickBubble} from "./SodaBubble/GlassClickBubble.ts";
+import {ContainerBubble} from "./SodaBubble/ContainerBubble.ts";
 
 addEventListener('bubble-connected', (event) => {
     const bubble = event.target as BBBubble;
     bubble.behaviorRegistry.register('glassClick', GlassClickBubble)
+    bubble.behaviorRegistry.register('container', ContainerBubble)
 });
 
 addEventListener('DOMContentLoaded', (_event) => {

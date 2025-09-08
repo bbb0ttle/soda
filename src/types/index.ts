@@ -1,0 +1,1 @@
+export type liquidGlassCreator = (dom: HTMLElement, size: number) => void

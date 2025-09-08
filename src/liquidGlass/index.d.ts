@@ -1,0 +1,1 @@
+export declare const createLiquidGlass: (dom: HTMLElement, size: number) => void;
