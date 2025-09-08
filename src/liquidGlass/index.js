@@ -64,6 +64,7 @@ class Shader {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 -10px 25px inset rgba(0, 0, 0, 0.05);
     cursor: grab;
     backdrop-filter: url(#${this.id}_filter) blur(0.6px) contrast(1.1) brightness(1.0) saturate(1.0);
+    -webkit-backdrop-filter: url(#${this.id}_filter) blur(0.6px) contrast(1.1) brightness(1.0) saturate(1.0);
     z-index: 9999;
     pointer-events: none;
   `;
