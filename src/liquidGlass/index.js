@@ -61,11 +61,11 @@ class Shader {
     height: ${this.height}px;
     overflow: hidden;
     border-radius: 150px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 -10px 25px inset rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 -10px 25px inset rgba(0, 0, 0, 0.05);
     cursor: grab;
     backdrop-filter: url(#${this.id}_filter) blur(0.6px) contrast(1.1) brightness(1.0) saturate(1.0);
     z-index: 9999;
-    pointer-events: auto;
+    pointer-events: none;
   `;
 
         // Create SVG filter
@@ -134,6 +134,7 @@ class Shader {
     }
 
     setupEventListeners() {
+        return;
         let isDragging = false;
         let startX, startY, initialX, initialY;
 
@@ -274,11 +275,10 @@ export function createLiquidGlass(dom, size) {
         }
     });
 
-    // Add to page
     shader.appendTo(dom);
-
-    console.log('Liquid Glass effect created! Drag the glass around the page.');
 
     // Return shader instance so it can be removed if needed
     window.liquidGlass = shader;
+
+    return shader;
 }

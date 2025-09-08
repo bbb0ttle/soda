@@ -1,6 +1,6 @@
 import type {BubbleBehavior, Stage} from "@bbb0ttle/bbbubble";
 import type { BBBubble } from "@bbb0ttle/bbbubble";
-import { createLiquidGlass } from '../liquidGlass'
+import {createLiquidGlass, type Shader} from '../liquidGlass'
 
 export class ContainerBubble implements BubbleBehavior {
     public constructor(bubble: BBBubble) {
@@ -12,12 +12,17 @@ export class ContainerBubble implements BubbleBehavior {
 
     img!: HTMLImageElement;
 
+    imgStyle!: CSSStyleSheet;
+
     onLearned: () => Promise<void> = async () => {
 
+        const size = this.actor.size;
+
         const image = new Image();
+        image.classList.add("soda")
         image.src = 'img/soda.png';
         image.style.setProperty('opacity', '0');
-        image.style.setProperty('width', 'calc(100% - 150px)');
+        image.style.setProperty('width', `calc(100% - ${size * 1 / 3}px)`);
         image.style.setProperty('transition', 'opacity 1s ease-in-out');
 
         this.img = image;
@@ -25,6 +30,8 @@ export class ContainerBubble implements BubbleBehavior {
         this.img.onload = () => {
             console.log('ContainerBubble image loaded')
         };
+
+        await this.onBorn()
     };
 
     onSick: () => Promise<void> = async () => {
@@ -41,6 +48,8 @@ export class ContainerBubble implements BubbleBehavior {
 
     alive: boolean = false;
 
+    shd!: Shader;
+
     onBorn: () => Promise<void> = async () => {
         if (this.alive) {
             return;
@@ -48,31 +57,33 @@ export class ContainerBubble implements BubbleBehavior {
 
         this.alive = true;
 
-        const { width, height } = this.actor.spaceRect ?? { width: 50, height: 50 };
+        const size = this.actor.size;
 
-        const size = Math.sqrt(width * width + height * height) / 4;
-
-        const centerX = width / 2;
-        const centerY = height / 2;
         this.actor.fade(1);
-        this.actor.scaleTo(160, 160)
-        this.actor.goto({ x: centerX, y: centerY });
-        await this.actor.scaleTo(size, 200, true);
-        this.img.style.setProperty('opacity', '0');
-        this.actor.appendChild(this.img);
-        this.img.style.setProperty('opacity', '1');
-        // const { height: rHeight } = this.actor.spaceRect ?? { width: 50, height: 50 };
-        // this.img.style.setProperty('height', `${rHeight}px`)
+        this.img!.style.setProperty('opacity', '0');
+        this.actor.element!.appendChild(this.img!);
+        this.img!.style.setProperty('opacity', '1');
 
-        await this.actor.goto({
-            x: centerX - size / 2,
-            y: centerY - size / 2,
-        }, 200, true)
-
-        createLiquidGlass(this.actor.element!, 250);
+        this.shd = createLiquidGlass(this.actor.element!, size);
 
         this.actor.element!.style.setProperty('box-shadow', '0 4px 8px rgba(0, 0, 0, 0.25), 0 -10px 25px inset rgba(0, 0, 0, 0.15)');
 
+        this.imgStyle = new CSSStyleSheet();
+
+        this.imgStyle.replaceSync(`
+            .soda {
+                position: relative;
+                animation: idle 3s linear infinite alternate;
+            }
+            
+            @keyframes idle {
+                0% { transform: translateX(-${size * 1 / 3}px); }
+                100% { transform: translateX(${size * 1 / 3}px); }
+            }
+        `)
+
+        console.log(this.actor.root);
+        this.actor.root.adoptedStyleSheets = [...this.actor.root.adoptedStyleSheets, this.imgStyle];
 
     };
 
@@ -88,6 +99,18 @@ export class ContainerBubble implements BubbleBehavior {
     };
     onTouch: (another: BBBubble) => Promise<void> = async (_another) => {
     };
+
+    private async recycle() {
+        this.actor.fade(0, this.actor.moveDuration() + this.actor.configuration.defaultAnimationDuration);
+        await this.actor.goto(this.actor.topPos(), this.actor.moveDuration());
+        this.img.remove();
+        this.shd.destroy();
+        this.actor.element!.style.removeProperty('box-shadow');
+        this.actor.element!.removeChild(this.img);
+        this.actor.root.adoptedStyleSheets = this.actor.root.adoptedStyleSheets.filter(s => s !== this.imgStyle);
+        await this.actor.recycle();
+    }
     onClick: () => Promise<void> = async () => {
+        await this.recycle();
     };
 }

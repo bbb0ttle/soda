@@ -11,17 +11,42 @@ export class GlassClickBubble implements BubbleBehavior {
     onLearned: () => Promise<void> = async () => {
         return this.onBorn()
     };
-    onSick: () => Promise<void> = async () => {};
+    onSick: () => Promise<void> = async () => {
+    };
     after?: ((stage: Stage) => Promise<void>) | undefined;
 
-    onLongPress?: ((pos: { x: number; y: number; }, originEvent: Event) => Promise<void>) | undefined;
-    onShortPress?: ((pos: { x: number; y: number; }, originEvent: Event) => Promise<void>) | undefined;
+    onLongPress: ((pos: { x: number; y: number; }, originEvent: Event) => Promise<void>) | undefined = async () => {
+
+    };
+    onShortPress?: ((pos: { x: number; y: number; }, originEvent: Event) => Promise<void>) | undefined = async (pos) => {
+        const finalSize = 250;
+
+        pos.x -= finalSize / 2;
+        pos.y -= finalSize / 2;
+
+        this.actor.goto(pos);
+
+        await this.actor.bounce(finalSize);
+
+        const becomeIntoContainer = this.actor.behaviorRegistry.get('container');
+
+        await this.actor.learn(becomeIntoContainer)
+
+    };
     onDrag?: ((pos: { x: number; y: number; }, originEvent: Event) => Promise<void>) | undefined;
     onPointEvtCancel?: (() => void) | undefined;
 
     actor!: BBBubble;
 
+    alive: boolean = false;
+
     onBorn: () => Promise<void> = async () => {
+        if (this.alive) {
+            return;
+        }
+
+        this.alive = true;
+
         const size = this.actor.randomInitSize();
 
         this.actor.position.x -= size / 2;
@@ -32,14 +57,8 @@ export class GlassClickBubble implements BubbleBehavior {
         this.actor.fade(this.actor.randomInitOpacity());
 
         await this.actor.bounce(size)
-
-        await this.actor.goto(this.actor.topPos(), this.actor.moveDuration());
-
-        await this.actor.fade(0);
-
-        const normalBehavior = this.actor.behaviorRegistry.get('default');
-        await this.actor.learn(normalBehavior);
     };
+
 
     onGlassReady: () => Promise<void> = async () => {
         return this.onBorn();
@@ -57,5 +76,6 @@ export class GlassClickBubble implements BubbleBehavior {
     onTouch: (another: BBBubble) => Promise<void> = async (_another) => {
     };
     onClick: () => Promise<void> = async () => {
+
     };
 }
