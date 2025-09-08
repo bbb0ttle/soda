@@ -51,7 +51,8 @@ export class ContainerBubble implements BubbleBehavior {
     shd!: Shader;
 
     onBorn: () => Promise<void> = async () => {
-        if (this.alive) {
+        if (this.alive || !this.supportsSVGFilters()) {
+            await this.actor.recycle();
             return;
         }
 
@@ -87,6 +88,10 @@ export class ContainerBubble implements BubbleBehavior {
 
     };
 
+    supportsSVGFilters() {
+        const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+        return typeof filter.x !== 'undefined';
+    }
 
     isReadyToGrow: () => boolean = () => false;
     onGrown: () => Promise<void> = async () => {
