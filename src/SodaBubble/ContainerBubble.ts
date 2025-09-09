@@ -15,6 +15,10 @@ export class ContainerBubble implements BubbleBehavior {
     imgStyle!: CSSStyleSheet;
 
     onLearned: () => Promise<void> = async () => {
+        if (this.alive || !this.supportsSVGFilters()) {
+            await this.actor.recycle();
+            return;
+        }
 
         const size = this.actor.size;
 
@@ -51,11 +55,6 @@ export class ContainerBubble implements BubbleBehavior {
     shd!: Shader;
 
     onBorn: () => Promise<void> = async () => {
-        if (this.alive || !this.supportsSVGFilters()) {
-            await this.actor.recycle();
-            return;
-        }
-
         this.alive = true;
 
         const size = this.actor.size;
@@ -83,9 +82,7 @@ export class ContainerBubble implements BubbleBehavior {
             }
         `)
 
-        console.log(this.actor.root);
         this.actor.root.adoptedStyleSheets = [...this.actor.root.adoptedStyleSheets, this.imgStyle];
-
     };
 
     supportsSVGFilters() {
@@ -111,7 +108,6 @@ export class ContainerBubble implements BubbleBehavior {
         this.img.remove();
         this.shd.destroy();
         this.actor.element!.style.removeProperty('box-shadow');
-        this.actor.element!.removeChild(this.img);
         this.actor.root.adoptedStyleSheets = this.actor.root.adoptedStyleSheets.filter(s => s !== this.imgStyle);
         await this.actor.recycle();
     }
