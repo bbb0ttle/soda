@@ -10,13 +10,13 @@ export class ContainerBubble implements BubbleBehavior {
     onForgot: () => Promise<void> = async () => {
     };
 
-    img!: HTMLImageElement;
+    img!: HTMLImageElement | null;
 
     imgStyle!: CSSStyleSheet;
 
     onLearned: () => Promise<void> = async () => {
-        if (this.alive || !this.supportsSVGFilters()) {
-            await this.actor.recycle();
+        if (!this.supportsSVGFilters()) {
+            await this.recycle();
             return;
         }
 
@@ -55,6 +55,10 @@ export class ContainerBubble implements BubbleBehavior {
     shd!: Shader;
 
     onBorn: () => Promise<void> = async () => {
+        if (this.alive) {
+            return;
+        }
+
         this.alive = true;
 
         const size = this.actor.size;
@@ -83,6 +87,7 @@ export class ContainerBubble implements BubbleBehavior {
         `)
 
         this.actor.root.adoptedStyleSheets = [...this.actor.root.adoptedStyleSheets, this.imgStyle];
+
     };
 
     supportsSVGFilters() {
@@ -97,20 +102,26 @@ export class ContainerBubble implements BubbleBehavior {
     isReadyToDie: () => boolean = () => {
         return false;
     };
+
     onDeath: () => Promise<void> = async () => {
     };
+
     onTouch: (another: BBBubble) => Promise<void> = async (_another) => {
     };
 
     private async recycle() {
         this.actor.fade(0, this.actor.moveDuration() + this.actor.configuration.defaultAnimationDuration);
         await this.actor.goto(this.actor.topPos(), this.actor.moveDuration());
-        this.img.remove();
+
+        console.log("recycling ContainerBubble");
         this.shd.destroy();
+        this.img!.remove();
+        this.img = null;
         this.actor.element!.style.removeProperty('box-shadow');
         this.actor.root.adoptedStyleSheets = this.actor.root.adoptedStyleSheets.filter(s => s !== this.imgStyle);
         await this.actor.recycle();
     }
+
     onClick: () => Promise<void> = async () => {
         await this.recycle();
     };
