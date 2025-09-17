@@ -13,7 +13,7 @@
     "vite": "^7.1.3"
   },
   "dependencies": {
-    "@bbb0ttle/bbbubble": "0.2.3-beta.12"
+    "@bbb0ttle/bbbubble": "0.2.3-beta.15"
   },
   "keywords": [],
   "author": "",
