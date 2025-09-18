@@ -15,26 +15,6 @@ export class ContainerBubble implements BubbleBehavior {
     imgStyle!: CSSStyleSheet;
 
     onLearned: () => Promise<void> = async () => {
-        if (!this.supportsSVGFilters()) {
-            await this.recycle();
-            return;
-        }
-
-        const size = this.actor.size;
-
-        const image = new Image();
-        image.classList.add("soda")
-        image.src = 'img/soda.png';
-        image.style.setProperty('opacity', '0');
-        image.style.setProperty('width', `calc(100% - ${size * 1 / 3}px)`);
-        image.style.setProperty('transition', 'opacity 1s ease-in-out');
-
-        this.img = image;
-
-        this.img.onload = () => {
-            console.log('ContainerBubble image loaded')
-        };
-
         await this.onBorn()
     };
 
@@ -50,23 +30,14 @@ export class ContainerBubble implements BubbleBehavior {
 
     actor!: BBBubble;
 
-    alive: boolean = false;
-
     shd!: Shader;
 
     onBorn: () => Promise<void> = async () => {
-        if (this.alive) {
-            return;
-        }
-
-        this.alive = true;
+        this.actor.display(true);
 
         const size = this.actor.size;
 
         this.actor.fade(1);
-        this.img!.style.setProperty('opacity', '0');
-        this.actor.element!.appendChild(this.img!);
-        this.img!.style.setProperty('opacity', '1');
 
         this.shd = createLiquidGlass(this.actor.element!, size);
 
@@ -74,26 +45,21 @@ export class ContainerBubble implements BubbleBehavior {
 
         this.imgStyle = new CSSStyleSheet();
 
-        this.imgStyle.replaceSync(`
-            .soda {
-                position: relative;
-                animation: idle 3s linear infinite alternate;
-            }
-            
-            @keyframes idle {
-                0% { transform: translateX(-${size * 1 / 3}px); }
-                100% { transform: translateX(${size * 1 / 3}px); }
-            }
-        `)
+        // this.imgStyle.replaceSync(`
+        //     .soda {
+        //         position: relative;
+        //         animation: idle 3s linear infinite alternate;
+        //     }
+        //
+        //     @keyframes idle {
+        //         0% { transform: translateX(-${size * 1 / 3}px); }
+        //         100% { transform: translateX(${size * 1 / 3}px); }
+        //     }
+        // `)
 
         this.actor.root.adoptedStyleSheets = [...this.actor.root.adoptedStyleSheets, this.imgStyle];
 
     };
-
-    supportsSVGFilters() {
-        const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
-        return typeof filter.x !== 'undefined';
-    }
 
     isReadyToGrow: () => boolean = () => false;
     onGrown: () => Promise<void> = async () => {
@@ -113,10 +79,7 @@ export class ContainerBubble implements BubbleBehavior {
         this.actor.fade(0, this.actor.moveDuration() + this.actor.configuration.defaultAnimationDuration);
         await this.actor.goto(this.actor.topPos(), this.actor.moveDuration());
 
-        console.log("recycling ContainerBubble");
         this.shd.destroy();
-        this.img!.remove();
-        this.img = null;
         this.actor.element!.style.removeProperty('box-shadow');
         this.actor.root.adoptedStyleSheets = this.actor.root.adoptedStyleSheets.filter(s => s !== this.imgStyle);
         await this.actor.recycle();
