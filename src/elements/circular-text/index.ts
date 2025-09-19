@@ -17,11 +17,16 @@ export class CircularText extends HTMLElement {
         return ["size"];
     }
 
+    toggleShow() {
+        this.root.querySelector(".box")?.classList.toggle("show");
+    }
+
+    hide() {
+        this.root.querySelector(".box")?.classList.remove("show");
+    }
+
     show() {
-        const box: HTMLDivElement = this.shadowRoot!.querySelector(".box")!;
-        if (box) {
-            box.style.opacity = "1";
-        }
+        this.root.querySelector(".box")?.classList.toggle("show");
     }
 
     attributeChangedCallback() {
@@ -55,7 +60,11 @@ export class CircularText extends HTMLElement {
               
               opacity: 0;
               
-              transition: opacity 1s ease-in-out;
+              transition: opacity .6s ease-in-out;
+            }
+            
+            div.box.show {
+              opacity: 1;
             }
             
             div.text-wrapper {
