@@ -60,7 +60,7 @@ export class CircularText extends HTMLElement {
               
               opacity: 0;
               
-              transition: opacity .6s ease-in-out;
+              transition: opacity .7s ease-in-out;
             }
             
             div.box.show {
