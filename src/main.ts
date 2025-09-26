@@ -1,11 +1,16 @@
 import {type BBBubble, Glass} from "@bbb0ttle/bbbubble";
 import {GlassClickBubble} from "./SodaBubble/GlassClickBubble.ts";
 import {ContainerBubble} from "./SodaBubble/ContainerBubble.ts";
+import {TextBubble} from "./SodaBubble/TextBubble.ts";
+
+// @ts-ignore
+import * as MyElements from "./elements";
 
 addEventListener('bubble-connected', (event) => {
     const bubble = event.target as BBBubble;
     bubble.behaviorRegistry.register('glassClick', GlassClickBubble)
     bubble.behaviorRegistry.register('container', ContainerBubble)
+    bubble.behaviorRegistry.register('textTest', TextBubble)
 });
 
 addEventListener('DOMContentLoaded', (_event) => {
@@ -47,9 +52,4 @@ addEventListener('DOMContentLoaded', (_event) => {
 
         await bubble.learn(clickBehavior);
     });
-
-
-
-
-
 })
